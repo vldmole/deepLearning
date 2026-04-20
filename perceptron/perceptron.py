@@ -19,3 +19,11 @@ class Perceptron:
         err = target - prediction
         self.w += self.eta * err * input
         self.b += self.eta * err * 1
+
+    def train(self, X: np.ndarray, y: np.ndarray, epochs: int):
+        for epoch in range(epochs):
+          for i in range(len(X)):
+            pred = self.prediction_for(X[i])
+            self.train_step(X[i], y[i], pred)
+
+            
