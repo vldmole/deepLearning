@@ -1,0 +1,78 @@
+!git config --global user.email "xxxx"
+!git config --global user.name "xxxx"
+import getpass
+token = getpass.getpass('Cole seu token aqui: ')
+user = "xxxx"
+repo_name = "deepLearning"
+
+import sys
+import importlib
+
+# 1. Garante a raiz do projeto no path
+if '/content/deepLearning' not in sys.path:
+    sys.path.append('/content/deepLearning')
+
+# --- PERCEPTRON ---
+print("Perceptron:")
+try:
+    import perceptron.perceptron
+    importlib.reload(perceptron.perceptron)
+    from perceptron.perceptron import Perceptron
+    print("✅ Importado e Recarregado")
+except ImportError as e:
+    print(f"❌ Erro no Perceptron: {e}")
+
+# --- VISUALIZER ---
+print("\nVisualizer:")
+try:
+    import utils.plot
+    importlib.reload(utils.plot)
+    from utils.plot import Visualizer 
+    print("✅ Importado e Recarregado")
+except ImportError as e:
+    print(f"❌ Erro no Visualizer: {e} \n(Verifique se 'class Visualizer' existe em plot.py)")
+
+# --- DATA MANAGER ---
+print("\nDataManager:")
+try:
+    import utils.data_manager
+    importlib.reload(utils.data_manager)
+    from utils.data_manager import DataManager
+    print("✅ Importado e Recarregado")
+except ImportError as e:
+    print(f"❌ Erro no DataManager: {e}")
+
+def run_experiment(file_name, learning_rate=0.1, epochs=20):
+
+  file_path = f"/content/deepLearning/data-sets/{file_name}"
+  print(f"\n--- Running Experiment: {file_name} ---")
+  
+  df = DataManager.read_data_set(file_path)
+  if df is None: return
+
+  X, y = DataManager.prepare_data(df)
+
+  model = Perceptron(n_features=X.shape[1], learning_rate=learning_rate)
+  model.train(X, y, epochs)
+
+  print("✅ Treinamento concluído!")
+  print("Pesos finais:", model.w)
+  print("Bias final:", model.b)
+  Visualizer.plot_decision_boundary(X, y, model)
+    
+  return model
+
+  #Atividades
+#a) execute-o para o dataset da porta l´ogica OR (exemplo dos slides de aula);
+#b) execute-o para o dataset da porta l´ogica AND;
+#c) execute-o para o dataset da porta l´ogica XOR;
+
+datasets = [ "or.csv", "and.csv", "xor.csv"]
+
+for ds in datasets:
+    run_experiment(ds, learning_rate=0.1, epochs=30)
+
+%cd /content/{repo_name}
+!git add .
+!git commit -m "Reestruturado e funcionando Atividade A"
+!git push --set-upstream https://{user}:{token}@github.com/{user}/{repo}.git main
