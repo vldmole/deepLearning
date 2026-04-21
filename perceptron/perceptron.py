@@ -1,15 +1,19 @@
 import numpy as np
 
 class Perceptron:
+
+  #-----------------------------------------------------------------------------
     def __init__(self, n_features: int, learning_rate: float = 0.01):
         self.w = np.zeros(n_features)
         self.b = 0.0
         self.eta = learning_rate
 
+  #-----------------------------------------------------------------------------
     def prediction_for(self, input: np.ndarray) -> int:
         sum = np.dot(input, self.w) + self.b
         return 1 if sum >= 0 else 0
 
+  #-----------------------------------------------------------------------------
     def train_step (
         self, 
         input: np.ndarray, 
@@ -20,10 +24,11 @@ class Perceptron:
         self.w += self.eta * err * input
         self.b += self.eta * err * 1
 
+  #-----------------------------------------------------------------------------
     def train(self, X: np.ndarray, y: np.ndarray, epochs: int):
         for epoch in range(epochs):
           for i in range(len(X)):
             pred = self.prediction_for(X[i])
             self.train_step(X[i], y[i], pred)
-
+  #-----------------------------------------------------------------------------
             
