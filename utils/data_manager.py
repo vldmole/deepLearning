@@ -112,3 +112,4 @@ class DataManager:
     return df_x_normalized.values, df_y.values.flatten()
 
   #-----------------------------------------------------------------------------
+
